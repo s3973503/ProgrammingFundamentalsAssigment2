@@ -3,3 +3,4 @@ T2, child, 19.5
 T3, senior, 17.0
 T4, student, 20.5
 T5, concession, 20.5
+G6, Family, adult, 5
