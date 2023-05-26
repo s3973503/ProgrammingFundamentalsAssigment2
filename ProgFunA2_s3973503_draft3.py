@@ -112,7 +112,7 @@ class GroupTicket(Ticket):
         self.group_ticket_type_dic = group_ticket_type_dic
     
     def display_info(self):
-        print(self.id,self.group_name,self.name,self.price)
+        print(self.id,self.name,self.price)
 
 class Booking:
     def __init__(self,customer,movie,ticket,quantity):
@@ -122,7 +122,13 @@ class Booking:
         self.quantity=quantity
 
     def compute_cost(self):
-        return [self.ticket.get_price() * self.quantity, self.customer.get_booking_fee(self.quantity), self.customer.get_discount(self.ticket.get_price()* self.quantity)]
+        result = []
+        print(self.ticket)
+        print(self.quantity)
+        for index in range(0, len(self.ticket)):
+            result.append(self.ticket[index].get_price() * self.quantity[index])
+
+        return [sum(result), self.customer.get_booking_fee(sum(self.quantity)), self.customer.get_discount(sum(result))]
 
 class Records:
     list_of_existing_customers=[]
@@ -171,6 +177,7 @@ class Records:
                     if index % 2 == 0:
                         # print("printing:", group_ticket_type[index])
                         ticket_object = self.find_ticket(group_ticket_type[index].strip())
+                        print(ticket_object)
                         # print(ticket_object.get_name())
                         if ticket_object==None:
                             print("The ticket does not exists")
@@ -207,7 +214,7 @@ class Records:
             if ticket.get_id()==ticket_search_keyword or ticket.get_name()==ticket_search_keyword:
                 return ticket
         return None
-            
+     
     def display_customers(self):
         print("{:<10} {:<10} {:<10} {:<10} ".format( 'id', 'name', 'discount_rate','threshold')) 
         for customer in Records.list_of_existing_customers:
@@ -252,12 +259,30 @@ class Operations():
                 2:Display existing customer information 
                 3:Display exisiting movie information
                 4:Display existing ticket information
+                5:Add new movies
                 0: Exit the program""")
         print("####################################################################")
         operation_input_type = input("choose one option")
         return operation_input_type
     
+    def check_quantity(self):
+        ticket_quantity_list=[]
+        if len(self.ticket_quantity) != len(self.ticket_type_list):
+            return False
     
+        for quantity in self.ticket_quantity:
+            try:
+                if int(quantity) <= 0:
+                    return False
+                ticket_quantity_list.append(int(quantity))
+                if sum(ticket_quantity_list) > int(self.movie.get_seat_available()):
+                    print("The quantity must be less than number of available seats .please enter a smaller ticket quantity")
+                    # print("Ticket Available: ", available_movies[movie])
+                    return False
+            except ValueError:
+                return False
+        return True
+
     def ticket_purchase(self):
         
         customer_name=input("Enter the name of the customer[e.g. Huong]:")
@@ -274,26 +299,35 @@ class Operations():
                 break
         
         while True:
+            #1. take the input as string
             ticket_type=input("Enter the ticket type [enter a valid type only e.g. adult,child,senior,]:")
-            self.ticket=self.record.find_ticket(ticket_search_keyword=ticket_type)
-            if self.ticket == None:
-                print("Please enter valid type only")
-            else:
+            #2. split the list by comma
+            ticket_type=ticket_type.strip().split(',')
+            self.ticket_type_list = []
+            for individual_ticket_type in ticket_type:
+                returned_value = self.record.find_ticket(ticket_search_keyword=individual_ticket_type)
+                if returned_value == None:
+                    # print("Please enter the valid ticket type")
+                    break
+                self.ticket_type_list.append(returned_value)
+
+            if len(self.ticket_type_list) == len(ticket_type):
                 break
+            else:
+                print("Please enter the valid ticket type")
 
         while True:
-            self.ticket_quantity=int(input("Enter the ticket quantity[enter a positive integer only e.g 1,2,3]"))
-            try:
-                if self.ticket_quantity<=0:
-                    print("Please enter the valid number")
-                elif self.ticket_quantity>int(self.movie.get_seat_available()):
-                    print("No of seats quantity exceeded ")
-                else:
-                    break
-            except ValueError:
-                print("Please enter the valid number")
-            
-            
+            self.ticket_quantity=input("Enter the ticket quantity[enter a positive integer only e.g 1,2,3]").strip().split(",")
+            return_value = self.check_quantity()
+            if return_value == True:
+                self.ticket_quantity_list = []
+                for quantity in self.ticket_quantity:
+                    ticket_q = int(quantity.strip())
+                    self.ticket_quantity_list.append(ticket_q)
+                break
+            elif return_value == False:
+                print("Please enter a valid ticket quantity")
+
         self.customer=self.record.find_customer(customer_search_keyword=customer_name)
         
         if self.customer == None:
@@ -323,25 +357,25 @@ class Operations():
                 else:
                     print("Enter the valid type")
     
-        booking=Booking(self.customer,self.movie,self.ticket,self.ticket_quantity)
+        booking=Booking(self.customer,self.movie,self.ticket_type_list,self.ticket_quantity_list)
         self.total_cost_list=booking.compute_cost()
         self.total_cost=self.total_cost_list[0]+self.total_cost_list[1]-self.total_cost_list[2]
-        self.seats=self.movie.set_seat_available(int(self.movie.get_seat_available()) - self.ticket_quantity)
+        self.seats=self.movie.set_seat_available(int(self.movie.get_seat_available()) - sum(self.ticket_quantity_list))
         self.print_reciept()
     
     def print_reciept(self):
         print("-------------------------------------------------")
         print("Reciept of  ", self.customer.get_name() )
         print("--------------------------------------------------")
-        print("movie:                ", self.movie.get_name())
-        print("Ticket Type:          ", self.ticket.get_name())
-        print("Ticket Unit Price:    ", self.ticket.get_price())
-        print("Ticket quantity:      ", self.ticket_quantity)
-
-
+        for index in range(0, len(self.ticket_type_list)):
+            print("Ticket Type:          ",     self.ticket_type_list[index].get_name())
+            print("Ticket Unit Price:    ",     self.ticket_type_list[index].get_price())
+            print("Ticket quantity:      ",     self.ticket_quantity_list[index])
+            if len(self.ticket_type_list) > 1:
+                print("             ------                ")
         print("-----------------------------------------------------")
         print("discount:              ", self.customer.get_discount(self.total_cost_list[0]))
-        print("Booking fee            ", self.customer.get_booking_fee(self.ticket_quantity))
+        print("Booking fee            ", self.customer.get_booking_fee(sum(self.ticket_quantity_list)))
         print("Total cost             ", self.total_cost)
 
     def display_customers_information(self):
@@ -353,8 +387,24 @@ class Operations():
     def display_ticket_information(self):
         self.record.display_tickets()
      
-    
-    
+    def add_new_movies(self):
+        while True:
+            y_or_n = input("Do you want to add a list of movies  [enter y or n]")
+            if y_or_n == "y":
+                print("Enter the list of movies")
+                movies_input = input().strip()
+                movies_list = movies_input.split(",")
+                for movies in movies_list:
+                    movies = movies.strip()
+                    returned_result= self.record.find_movie(movies)
+                    if returned_result==None:
+                        movie=Movie("M10",movies,seat_available=50)
+                        Records.list_of_existing_movies.append(movie)
+                        print("{} movie added".format(movies))
+                    else:
+                        print("Movie already exists")        
+            break    
+            
 if __name__ == "__main__":
     print("welcome to RMIT Ticketing sysytem!")
     operation = Operations()
@@ -368,5 +418,12 @@ if __name__ == "__main__":
             operation.display_movie_information()
         if operation_input_type == "4":
             operation.display_ticket_information()
+        if operation_input_type == "5":
+            operation.add_new_movies()
         if operation_input_type == "0":
             break
+
+
+
+
+
