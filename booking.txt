@@ -4,3 +4,9 @@ Leo, Titanic, student, 2, 8.200000000000001, 4, 36.8
 Amelia, Superman, Friend4, 1, 16.0, 2, 66.0
 Florence, Titanic, senior, 3, concession, 1, 28.6, 8, 50.9
 Olivia, Avatar, adult, 2, student, 2, 0, 8, 99.0
+Sampreeth, Avatar, adult, 2, senior, 4, 0, 12, 130.0
+Prat, StarWar, Family4, 1, 24.84, 2, 59.959999999999994
+TestUser, Avatar, Family4, 1, 24.84, 2, 59.959999999999994
+TestUser2, Avatar, Family4, 1, 24.84, 2, 59.959999999999994
+TestUser3, Avatar, Family4, 1, 24.84, 2, 59.96
+George, StarWar, Family4, 1, 21.36, 2, 51.84

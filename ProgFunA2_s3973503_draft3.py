@@ -112,7 +112,7 @@ class Ticket:
         return self.name
     
     def  get_price(self):
-        return self.price
+        return round(self.price,2)
     
     def display_info(self):
         print(self.id,self.name,self.price)
@@ -145,13 +145,14 @@ class Booking:
     
     def get_quantity(self):
         return self.quantity
-# To compute the total cost of the booking of a customer.
+    
+    # To compute the total cost of the booking of a customer.
     def compute_cost(self):
         result = []
         for index in range(0, len(self.ticket)):
             result.append(self.ticket[index].get_price() * self.quantity[index])
-
-        return [sum(result), self.customer.get_booking_fee(sum(self.quantity)), self.customer.get_discount(sum(result))]
+        
+        return [round(sum(result),2), self.customer.get_booking_fee(sum(self.quantity)), round(self.customer.get_discount(sum(result)),2)]
 
 # Create a class records
 class Records:
@@ -450,7 +451,8 @@ class Operations():
         # print(self.customer,self.movie,self.ticket_type_list,self.ticket_quantity_list)
         booking=Booking(self.customer,self.movie,self.ticket_type_list,self.ticket_quantity_list)
         self.total_cost_list=booking.compute_cost()
-        self.total_cost=self.total_cost_list[0]+self.total_cost_list[1]-self.total_cost_list[2]
+        cost = self.total_cost_list[0]+self.total_cost_list[1]-self.total_cost_list[2]
+        self.total_cost=round(cost,2)
         self.seats=self.movie.set_seat_available(int(self.movie.get_seat_available()) - sum(self.ticket_quantity_list))
         self.add_to_booking()
         self.print_reciept()
