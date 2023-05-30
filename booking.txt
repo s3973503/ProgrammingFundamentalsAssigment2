@@ -1,0 +1,6 @@
+Olivia, Avatar, adult, 2, student, 2, 0, 8, 99.0
+George, StarWar, Family4, 1, 24.840000000000003, 2, 59.96000000000001
+Leo, Titanic, student, 2, 8.200000000000001, 4, 36.8
+Amelia, Superman, Friend4, 1, 16.0, 2, 66.0
+Florence, Titanic, senior, 3, concession, 1, 28.6, 8, 50.9
+Olivia, Avatar, adult, 2, student, 2, 0, 8, 99.0
