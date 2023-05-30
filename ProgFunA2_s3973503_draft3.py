@@ -1,4 +1,5 @@
 import os.path
+import sys
 class Customer:
     def __init__(self,id,name):
         self.id=id
@@ -38,6 +39,7 @@ class RewardFlatCustomer(Customer):
     def set_discount_rate(self,discount_rate):
         RewardFlatCustomer.discount_rate=discount_rate 
 
+
 class RewardStepCustomer(Customer):
     threshold=50
 
@@ -46,6 +48,8 @@ class RewardStepCustomer(Customer):
         self.discount_rate=discount_rate
 
     def get_discount(self,cost):
+        print(type(cost))
+        print(type(self.discount_rate))
         if cost >= RewardStepCustomer.threshold:
             return cost*self.discount_rate
         return 0
@@ -121,6 +125,18 @@ class Booking:
         self.ticket=ticket
         self.quantity=quantity
 
+    def get_customer(self):
+        return self.customer
+    
+    def get_movie(self):
+        return self.movie
+    
+    def get_ticket(self):
+        return self.ticket
+    
+    def get_quantity(self):
+        return self.quantity
+
     def compute_cost(self):
         result = []
         print(self.ticket)
@@ -134,9 +150,12 @@ class Records:
     list_of_existing_customers=[]
     list_of_existing_movies=[]
     list_of_existing_ticket_types=[]
+    list_of_existing_booking=[]
 
-    def read_customers(self):
-        f = open('customers.txt', 'r')
+    def read_customers(self,customer_details_path):
+        if customer_details_path=="":
+            customer_details_path="customers.txt"
+        f = open(customer_details_path, 'r')
         for line in f.readlines():
             customer_details = line.split(",")
             if len(customer_details)==2:
@@ -144,20 +163,24 @@ class Records:
             elif len(customer_details)==3:
                 customer=RewardFlatCustomer(customer_details[0].strip(),customer_details[1].strip())
             elif len(customer_details)==4:
-                customer=RewardStepCustomer(customer_details[0].strip(),customer_details[1].strip(),customer_details[2].strip())
+                customer=RewardStepCustomer(customer_details[0].strip(),customer_details[1].strip(),float(customer_details[2].strip()))
             Records.list_of_existing_customers.append(customer)
         f.close()   
         
-    def read_movies(self):
-        f = open('movies.txt', 'r')
+    def read_movies(self,movie_details_path):
+        if movie_details_path=="":
+            movie_details_path="movies.txt"
+        f = open(movie_details_path, 'r')
         for line in f.readlines():
             movie_details = line.split(",")
             movie=Movie(movie_details[0].strip(),movie_details[1].strip(),movie_details[2].strip())
             Records.list_of_existing_movies.append(movie)
         f.close()
 
-    def read_tickets(self):
-        f = open('tickets.txt', 'r')
+    def read_tickets(self,ticket_details_path):
+        if ticket_details_path=="":
+            ticket_details_path="tickets.txt"
+        f = open(ticket_details_path, 'r')
         for line in f.readlines():
             ticket_details = line.split(",")
             if "T" in ticket_details[0]:
@@ -195,6 +218,25 @@ class Records:
                 if (sum(group_ticket_list)*0.8)>=50:
                     group_ticket=GroupTicket(ticket_details[0].strip(), ticket_details[1].strip(),(sum(group_ticket_list)*0.8), group_ticket_dict)
                     Records.list_of_existing_ticket_types.append(group_ticket)
+        f.close()
+    def read_booking(self,booking_details_path):
+        f = open(booking_details_path, 'r')
+        for line in f.readlines():
+            list_of_ticktet_type_booking=[]
+            list_of_ticket_quantity_booking=[]
+            booking_details = line.split(",")
+            for index in range(2,len(booking_details)):
+                if (index%2==0):
+                    details=self.find_ticket(booking_details[index])
+                    if details!=None:
+                        list_of_ticktet_type_booking.append(booking_details[index])
+                        list_of_ticket_quantity_booking.append(booking_details[index +1])
+                    else:
+                         break
+            customer = self.find_customer(booking_details[0].strip())
+            movie = self.find_movie(booking_details[1])
+            booking = Booking(customer,movie,list_of_ticktet_type_booking,list_of_ticket_quantity_booking)
+            Records.list_of_existing_booking.append(booking)
         f.close()
 
     def find_customer(self,customer_search_keyword):
@@ -235,6 +277,27 @@ class Records:
         for ticket in Records.list_of_existing_ticket_types:
             print("{:<10} {:<10} {:<10} ".format( ticket.get_id(), ticket.get_name(),ticket.get_price()))
 
+    def display_booking(self):
+        # print("{:<10} {:<10} {:<10} ".format( 'customerName/id', 'MovieName/id', ))
+        # for index in range(0, len(self.ticket_type_list)):
+        #         print("{}, {}, ".format("ticketType", 'TicketQuantity'))
+        # print("{}, {}, {}\n".format('discount', 'bookingFee','TotalCost'))
+        f = open('booking.txt', 'r')
+        for line in f.readlines():
+            
+            list_of_ticktet_type_booking=[]
+            list_of_ticket_quantity_booking=[]
+            booking_details = line.split(",")
+
+            for index in range(2,len(booking_details)):
+                if (index%2==0):
+                    details=self.find_ticket(booking_details[index])
+                    if details!=None:
+                        list_of_ticktet_type_booking.append(booking_details[index])
+                        list_of_ticket_quantity_booking.append(booking_details[index +1])
+                    else:
+                         break                              
+
 class Operations():
 
     def check_file(self):  
@@ -245,12 +308,14 @@ class Operations():
         if True != os.path.isfile('./tickets.txt'):
             print('tickets.txt file not found')
 
-    def __init__(self):
+    def __init__(self,customer_details_path,movie_details_path,ticket_details_path,booking_details_path):
         self.check_file()
         self.record = Records()
-        self.record.read_customers()
-        self.record.read_movies()
-        self.record.read_tickets()
+        self.record.read_customers(customer_details_path)
+        self.record.read_movies(movie_details_path)
+        self.record.read_tickets(ticket_details_path)
+        if booking_details_path !='':
+            self.record.read_booking(booking_details_path)
 
     def menu(self):
         print("####################################################################")
@@ -260,6 +325,8 @@ class Operations():
                 3:Display exisiting movie information
                 4:Display existing ticket information
                 5:Add new movies
+                6.Adjust discount rate for all flat customers
+                7.Adjust discount rate for all Step customers
                 0: Exit the program""")
         print("####################################################################")
         operation_input_type = input("choose one option")
@@ -356,17 +423,45 @@ class Operations():
                     break
                 else:
                     print("Enter the valid type")
-    
+
+        # print(self.customer,self.movie,self.ticket_type_list,self.ticket_quantity_list)
         booking=Booking(self.customer,self.movie,self.ticket_type_list,self.ticket_quantity_list)
         self.total_cost_list=booking.compute_cost()
         self.total_cost=self.total_cost_list[0]+self.total_cost_list[1]-self.total_cost_list[2]
         self.seats=self.movie.set_seat_available(int(self.movie.get_seat_available()) - sum(self.ticket_quantity_list))
+        self.add_to_booking()
         self.print_reciept()
-    
+
+    def add_to_booking(self):
+        # read the file if its not there print ("file not found")
+        # check if it empty or not
+        # if its empty it return true 
+        # append the values 
+        # if not empty then \n and append
+        try:
+            f = open("booking.txt","r")
+            f.close()
+        except:
+            f = open("booking.txt", "x")
+            f.close()
+
+        try:
+            f = open("booking.txt", "a")
+            f.write("{}, {}, ".format(self.customer.get_name(), self.movie.get_name()))
+            for index in range(0, len(self.ticket_type_list)):
+                f.write("{}, {}, ".format(self.ticket_type_list[index].get_name(), self.ticket_quantity_list[index]))
+            f.write("{}, {}, {}\n".format(self.customer.get_discount(self.total_cost_list[0]), 
+                                        self.customer.get_booking_fee(sum(self.ticket_quantity_list)), 
+                                        self.total_cost))
+            f.close()
+        except:
+            print('error occured')
+      
     def print_reciept(self):
         print("-------------------------------------------------")
-        print("Reciept of  ", self.customer.get_name() )
+        print("Reciept of  ", self.customer.get_name())
         print("--------------------------------------------------")
+        print("Movie:                   ",      self.movie.get_name())
         for index in range(0, len(self.ticket_type_list)):
             print("Ticket Type:          ",     self.ticket_type_list[index].get_name())
             print("Ticket Unit Price:    ",     self.ticket_type_list[index].get_price())
@@ -403,11 +498,65 @@ class Operations():
                         print("{} movie added".format(movies))
                     else:
                         print("Movie already exists")        
-            break    
+            break  
+
+    def adjust_discount_rate_flat(self): 
+        while True:
+            try:
+                rate = float(input("Enter the new discount rate for RewardFlat customers: "))
+                if rate <= 0:
+                    raise ValueError("Discount rate must be a positive number.")
+                else:
+                    RewardFlatCustomer.discount_rate = rate
+                    break
+            except ValueError as e:
+                print(e)  
+
+    def adjust_discount_rate_step(self):
+        while True:
+            name_or_id=input("Enter the name or id of the reward step customer")
+            name_or_id=self.record.find_customer(name_or_id)
+            if name_or_id!=None:
+                if isinstance(name_or_id,RewardStepCustomer):
+                    try:
+                        rate = float(input("Enter the new discount rate for RewardStep customers: "))
+                        if rate <= 0:
+                            raise ValueError("Discount rate must be a positive number.")
+                        else:
+                            name_or_id.set_discount_rate(rate)
+                            break
+                    except ValueError as e:
+                        print(e)  
+            elif name_or_id==None:
+                print("The customer does not exist please enter the valid customer")
+
+
+
+
             
 if __name__ == "__main__":
+    # Get the file names from the command line arguments
+    if len(sys.argv)not in [1,4,5]:
+        print("Incorrect usage of arguments. Please provide four file names: customer file, movie file, ticket file, and booking file (optional).")
+        sys.exit(1)
+    elif len(sys.argv)==4:
+        customer_details_path = sys.argv[1]
+        movie_details_path = sys.argv[2]
+        ticket_details_path = sys.argv[3]
+        booking_details_path=''
+    elif len(sys.argv)==5:
+        customer_details_path = sys.argv[1]
+        movie_details_path = sys.argv[2]
+        ticket_details_path = sys.argv[3]
+        booking_details_path = sys.argv[4]
+    else:
+        customer_details_path = ''
+        movie_details_path = ''
+        ticket_details_path = ''
+        booking_details_path = ''
+
     print("welcome to RMIT Ticketing sysytem!")
-    operation = Operations()
+    operation = Operations(customer_details_path,movie_details_path,ticket_details_path,booking_details_path )
     while True:
         operation_input_type = operation.menu()
         if operation_input_type == "1":
@@ -420,6 +569,10 @@ if __name__ == "__main__":
             operation.display_ticket_information()
         if operation_input_type == "5":
             operation.add_new_movies()
+        if operation_input_type == "6":
+            operation.adjust_discount_rate_flat()
+        if operation_input_type == "7":
+            operation.adjust_discount_rate_step()
         if operation_input_type == "0":
             break
 
