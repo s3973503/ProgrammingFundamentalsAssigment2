@@ -1,5 +1,6 @@
 import os.path
 import sys
+
 # Creating a class customer with  approriate getters(id,name, discount) and setters 
 class Customer:
     def __init__(self,id,name):
@@ -20,6 +21,7 @@ class Customer:
     
     def display_info(self):
         print(self.id, self.name)
+
 # Creating a class customer with  approriate getters and setters 
 # We are overriding customer class to get the name and id of the customers in reward 
 # also using inhertitence to inherit the customer class to Reward Flat customer.
@@ -32,9 +34,8 @@ class RewardFlatCustomer(Customer):
     def get_discount(self,cost):
         return cost * RewardFlatCustomer.discount_rate
     
-    #TODO: update this to print right customer information details
     def get_display_info(self):
-        print(self.discount_rate)
+        print(self.id, self.name, self.discount_rate)
 
     def get_discount_rate(self):
         return RewardFlatCustomer.discount_rate
@@ -53,15 +54,14 @@ class RewardStepCustomer(Customer):
         self.discount_rate=discount_rate
 
     def get_discount(self,cost):
-        print(type(cost))
-        print(type(self.discount_rate))
         if cost >= RewardStepCustomer.threshold:
             return cost*self.discount_rate
         return 0
     
-    #TODO: update this method with right attributes
+
     def display_info(self):
-        print(self.discount_rate)
+        print(self.id, self.name, self.discount_rate)
+
     
     def get_discount_rate(self):
         return self.discount_rate
@@ -75,6 +75,7 @@ class RewardStepCustomer(Customer):
     
     def set_threshold(self,threshold):
         RewardStepCustomer.threshold=threshold
+
 #Creating a class movie with approriate getters(moviename,id,seat available) and setters (seat available)
 class Movie:
     def __init__(self,id,name,seat_available):
@@ -96,6 +97,7 @@ class Movie:
     
     def set_seat_available(self,seat_available):
         self.seat_available =seat_available
+
 # creating a class ticket with approriate getter(id,name,price)
 class Ticket:
     def __init__(self,id,name,price):
@@ -114,6 +116,7 @@ class Ticket:
     
     def display_info(self):
         print(self.id,self.name,self.price)
+
 # Creating a class group ticket and inheriting the class ticket in Group ticket because we already have id ,name of the ticket in ticket
 class GroupTicket(Ticket):
     def __init__(self,id,group_name,group_ticket_price,group_ticket_type_dic):
@@ -197,33 +200,32 @@ class Records:
                 Records.list_of_existing_ticket_types.append(ticket)
             elif "G" in ticket_details[0]:
                 group_ticket_type=ticket_details[2:]
-# 1. itterate over the list of group_ticket_type
-# 2. itteration -> group_ticket_type[0] 
-# 3. check if this ticket_type exsits in that ticket_type list
-# 4. if present then get me the object of ticket_type
-# 5. if not present throw error and continue the program
-# 6. when present -> append to dic -> key will be the object of ticket_type and value will quantity i.e group_ticket_type[1]
+                # 1. itterate over the list of group_ticket_type
+                # 2. itteration -> group_ticket_type[0] 
+                # 3. check if this ticket_type exsits in that ticket_type list
+                # 4. if present then get me the object of ticket_type
+                # 5. if not present throw error and continue the program
+                # 6. when present -> append to dic -> key will be the object of ticket_type and value will quantity i.e group_ticket_type[1]
                 group_ticket_dict={}
                 for index in range(len(group_ticket_type)):
                     if index % 2 == 0:
-                        # print("printing:", group_ticket_type[index])
                         ticket_object = self.find_ticket(group_ticket_type[index].strip())
-                        print(ticket_object)
-                        # print(ticket_object.get_name())
                         if ticket_object==None:
                             print("The ticket does not exists")
                             group_ticket_dict = {}
                             break
                         else:
                             group_ticket_dict[ticket_object]=int(group_ticket_type[index + 1 ].strip())
-# 7. loop throw dic and check if the sum of ticket_price is greater than 50 if not throw an error and don't create an object of GroupTicket
-# 8. if price greater than 50 create an object of Group Ticket. 
+                # 7. loop throw dic and check if the sum of ticket_price is greater than 50 if not throw an error and don't create an object of GroupTicket
+                # 8. if price greater than 50 create an object of Group Ticket. 
                 group_ticket_list=[]
                 for key,value in group_ticket_dict.items():
                     group_ticket_list.append(key.get_price() * value)
                 if (sum(group_ticket_list)*0.8)>=50:
                     group_ticket=GroupTicket(ticket_details[0].strip(), ticket_details[1].strip(),(sum(group_ticket_list)*0.8), group_ticket_dict)
                     Records.list_of_existing_ticket_types.append(group_ticket)
+                else:
+                    print("Something wrong with the group ticket")
         f.close()
 
 # Function to read booking from bookings.txt
@@ -243,13 +245,8 @@ class Records:
                          break
             customer = self.find_customer(booking_details[0].strip())
             movie = self.find_movie(booking_details[1].strip())
-            print("Customer:" , customer.get_name())
-            print("Movie", movie.get_name())
-            print("ticket_type_list:",[ticket.get_name() for ticket in list_of_ticktet_type_booking])
-            print("ticket_quantity_list", list_of_ticket_quantity_booking)
             booking = Booking(customer,movie,list_of_ticktet_type_booking,list_of_ticket_quantity_booking)
             Records.list_of_existing_booking.append(booking)
-        print([booking.compute_cost() for booking in Records.list_of_existing_booking])
         f.close()
 
 # Function to check if the inputted customers is in already exisiting customers list
@@ -295,7 +292,7 @@ class Records:
         for ticket in Records.list_of_existing_ticket_types:
             print("{:<10} {:<10} {:<10} ".format( ticket.get_id(), ticket.get_name(),ticket.get_price()))
 
-# Function to display exisiting booking information.
+    # Function to display exisiting booking information.
     def display_booking(self):
         f = open('booking.txt', 'r')
         for line in f.readlines():
@@ -339,6 +336,7 @@ class Operations():
 
 # Printing the menu option to choose from the following:
     def menu(self):
+        print("welcome to RMIT Ticketing sysytem!")
         print("####################################################################")
         print("""You can choose from the following option\n
                 1:Purchase a ticket
@@ -348,6 +346,9 @@ class Operations():
                 5:Add new movies
                 6.Adjust discount rate for all flat customers
                 7.Adjust discount rate for all Step customers
+                8.Display booking information
+                9.Display Popular movie
+                10.Display All records
                 0: Exit the program""")
         print("####################################################################")
         operation_input_type = input("choose one option")
@@ -579,6 +580,38 @@ class Operations():
         print("Movie Name:", highest_purchased_movie,
             "Total Cost:", highest_purchased_movie_cost)
 
+    def display_all_records(self):
+        all_records={}
+        list_of_all_movies=[]
+        list_of_all_ticket_type=[]
+        for movie in Records.list_of_existing_movies:
+            list_of_all_movies.append(movie.get_name())
+        for ticket in Records.list_of_existing_ticket_types:
+            list_of_all_ticket_type.append(ticket.get_name())
+        for movie in list_of_all_movies:
+            all_records[movie]={}
+            for ticket in list_of_all_ticket_type:
+                all_records[movie][ticket]=0
+            all_records[movie]["Revenue"]=0  
+      
+
+        for booking in Records.list_of_existing_booking:
+            tickets=[book.get_name() for book in booking.get_ticket()]
+            qunatities = booking.get_quantity()
+            for index in range(0,len(tickets)):
+                all_records[booking.movie.get_name()][tickets[index]] += qunatities[index]
+            cost, booking_fee, discount = booking.compute_cost()
+            total_cost = cost+booking_fee-discount
+            all_records[booking.movie.get_name()]["Revenue"] += total_cost
+        
+        header = "".join("{:<12}".format(value) for value in list_of_all_ticket_type)
+        print("{:<12} {} {:<12}".format("", header,"Revenue"))
+        for movie in all_records.keys():
+            ticket_type_values = "".join("{:<12}".format(all_records[movie][value]) for value in list_of_all_ticket_type)
+            print("{:<13} {} {:<15}".format(movie, ticket_type_values, all_records[movie]["Revenue"]))
+
+
+
 
  # Main function
 if __name__ == "__main__":
@@ -602,7 +635,7 @@ if __name__ == "__main__":
         ticket_details_path = ''
         booking_details_path = ''
 
-    print("welcome to RMIT Ticketing sysytem!")
+    
     operation = Operations(customer_details_path,movie_details_path,ticket_details_path,booking_details_path )
     while True:
         operation_input_type = operation.menu()
@@ -624,6 +657,8 @@ if __name__ == "__main__":
             operation.display_booking_info()
         if operation_input_type == "9":
             operation.display_popular_movie()
+        if operation_input_type == "10":
+            operation.display_all_records()
         if operation_input_type == "0":
             break
 
