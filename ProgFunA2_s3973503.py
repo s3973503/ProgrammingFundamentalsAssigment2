@@ -185,6 +185,7 @@ class Records:
             movie=Movie(movie_details[0].strip(),movie_details[1].strip(),movie_details[2].strip())
             Records.list_of_existing_movies.append(movie)
         f.close()
+
     # Function to read the tickets from the tickets.txt file 
     def read_tickets(self,ticket_details_path):
         f = open(ticket_details_path, 'r')
@@ -344,27 +345,27 @@ class Operations():
             print('tickets.txt file not found')
             quit()   
 
-# Printing the menu option to choose from the following:
+    # Printing the menu option to choose from the following:
     def menu(self):
         print("welcome to RMIT Ticketing sysytem!")
         print("####################################################################")
         print("""You can choose from the following option\n
             1:Purchase a ticket
-            2:Display existing customer information 
-            3:Display exisiting movie information
-            4:Display existing ticket information
-            5:Add new movies
-            6.Adjust discount rate for all flat customers
-            7.Adjust discount rate for all Step customers
-            8.Display booking information
-            9.Display Popular movie
-            10.Display All records
+            2:Display existing customer's information 
+            3:Display exisiting movie's information
+            4:Display existing ticket's  information
+            5:Add movies
+            6.Adjust discount rate of all Reward flat customers
+            7.Adjust discount rate of a Reward Step customers
+            8.Display all booking 
+            9.Display the most Popular movie
+            10.Display All movie record
             0: Exit the program""")
         print("####################################################################")
         operation_input_type = input("choose one option")
         return operation_input_type
     
-# Function to handle error inputs for quantity  
+    # Function to handle error inputs for quantity  
     def check_quantity(self):
         ticket_quantity_list=[]
         if len(self.ticket_quantity) != len(self.ticket_type_list):
@@ -605,7 +606,8 @@ class Operations():
                         print(e)  
             elif name_or_id==None:
                 print("The customer does not exist please enter the valid customer")
-         
+
+    #Calling a function to display booking info 
     def display_booking_info(self):
         self.record.display_booking()
     
@@ -619,10 +621,12 @@ class Operations():
             if total_cost > highest_purchased_movie_cost:
                 highest_purchased_movie_cost = total_cost 
                 highest_purchased_movie = booking.movie.get_name()
-
+        
+        # Displaying totatl cost and movie name of popular movie
         print("Movie Name:", highest_purchased_movie,
             "Total Cost:", highest_purchased_movie_cost)
 
+    # Function to display all the movie records
     def display_all_records(self):
         all_records={}
         list_of_all_movies=[]
@@ -651,7 +655,8 @@ class Operations():
         for movie in all_records.keys():
             ticket_type_values = "".join("{:<12}".format(all_records[movie][value]) for value in list_of_all_ticket_type)
             print("{:<13} {} {:<15}".format(movie, ticket_type_values, round(all_records[movie]["Revenue"],2)))
-
+    
+    # Function to update the three test files after exit 
     def exit_program(self):
         file_c = open(self.customer_details_path, 'w')
         file_m= open(self.movie_details_path,'w')
@@ -723,7 +728,7 @@ if __name__ == "__main__":
         movie_details_path = 'movies.txt'
         ticket_details_path = 'tickets.txt'
         booking_details_path = 'booking.txt'
-
+    
     operation = Operations(customer_details_path,movie_details_path,ticket_details_path,booking_details_path )
     while True:
         operation_input_type = operation.menu()

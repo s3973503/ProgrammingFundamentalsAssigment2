@@ -2,29 +2,37 @@ C1, Olivia
 C2, Noah
 S3, George, 0.3, 50
 S5, Florence, 0.4, 50
-F8, Amelia, 0.2
-F10, Leo, 0.2
+F8, Amelia, 0.9
+F10, Leo, 0.9
 C11, Henry
 C8, Sam
 S10, Prat, 0.3, 50
-F11, TestUser, 0.2
+F11, TestUser, 0.9
 S12, Prag, 0.3, 50
 C13, PragTest
-F13, Sampreeth, 0.2
+F13, Sampreeth, 0.9
 S14, Reetha, 0.3, 50
 C15, Amith
 S16, Sanjani, 0.3, 50
 C17, sanny
-F18, Yongli, 0.2
+F18, Yongli, 0.9
 S19, Telli, 0.3, 50
-F20, Ganga, 0.2
-F21, hgy, 0.2
-F22, Denver, 0.2
-S23, Yashoda, 0.3, 50
-F24, rama, 0.2
-F25, Ravana, 0.2
-F26, Yeuririr, 0.2
+F20, Ganga, 0.9
+F21, hgy, 0.9
+F22, Denver, 0.9
+S23, Yashoda, 0.8, 50
+F24, rama, 0.9
+F25, Ravana, 0.9
+F26, Yeuririr, 0.9
 S27, ganagate, 0.3, 50
 S28, anand, 0.3, 50
 S29, Akshay, 0.3, 50
 S30, HelloWorld, 0.3, 50
+C31, Houngh
+F32, geetha, 0.9
+F33, Ramesh, 0.9
+S34, Heema, 0.1, 50
+S35, tara, 0.9, 50
+F36, YGDWEUYG, 0.9
+F37, Dad, 0.9
+F38, yfdkuwf, 0.9

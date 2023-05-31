@@ -1,0 +1,15 @@
+Houngh, Avatar, senior, 1, 0, 2, 17.0
+geetha, Avatar, senior, 1, 15.3, 2, 17.0
+Ramesh, Titanic, child, 3, 52.65, 6, 58.5
+Ramesh, Titanic, child, 3, 52.65, 6, 58.5
+Heema, Superman, senior, 1, 0, 2, 17.0
+Heema, Avatar, child, 1, 0, 2, 19.5
+Heema, Avatar, adult, 5, 12.5, 10, 125.0
+tara, Avatar, adult, 10, 225.0, 20, 250.0
+tara, Titanic, child, 1, 0, 2, 19.5
+tara, Avatar, senior, 5, 76.5, 10, 85.0
+YGDWEUYG, Avatar, adult, 1, 22.5, 2, 25.0
+Dad, Avatar, child, 1, 17.55, 2, 19.5
+yfdkuwf, Titanic, child, 1, 17.55, 2, 19.5
+Yashoda, Avatar, child, 1, 0, 2, 19.5
+Yashoda, Avatar, child, 5, 78.0, 10, 97.5
