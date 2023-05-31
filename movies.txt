@@ -1,5 +1,10 @@
-M1, Avatar, 40
-M2, Titanic, 38
+M1, Avatar, 32
+M2, Titanic, 34
 M3, StarWar, 50
 M4, BlackPanther, 50
-M5, Superman, 50
+M5, Superman, 49
+M6, Water, 50
+M7, glass, 50
+M8, red, 50
+M9, pink, 50
+M10, water, 50

@@ -162,12 +162,12 @@ class Records:
     list_of_existing_ticket_types=[]
     list_of_existing_booking=[]
 
-# Function to read the customer from the customer.txt file
+    # Function to read the customer from the customer.txt file
     def read_customers(self,customer_details_path):
         f = open(customer_details_path, 'r')
         for line in f.readlines():
             customer_details = line.split(",")
-# Checking the length of customers to append the proper details because customer has only 2 values while reward customers has 3 attributes and Step customers has 4 attributes 
+            # Checking the length of customers to append the proper details because customer has only 2 values while reward customers has 3 attributes and Step customers has 4 attributes 
             if len(customer_details)==2:
                 customer= Customer(customer_details[0].strip(),customer_details[1].strip())
             elif len(customer_details)==3:
@@ -177,7 +177,7 @@ class Records:
             Records.list_of_existing_customers.append(customer)
         f.close()
 
-# Function to read the movies from the movies.txt file   
+    # Function to read the movies from the movies.txt file   
     def read_movies(self,movie_details_path):
         f = open(movie_details_path, 'r')
         for line in f.readlines():
@@ -185,7 +185,7 @@ class Records:
             movie=Movie(movie_details[0].strip(),movie_details[1].strip(),movie_details[2].strip())
             Records.list_of_existing_movies.append(movie)
         f.close()
-# Function to read the tickets from the tickets.txt file 
+    # Function to read the tickets from the tickets.txt file 
     def read_tickets(self,ticket_details_path):
         f = open(ticket_details_path, 'r')
         for line in f.readlines():
@@ -223,7 +223,7 @@ class Records:
                     print("Something wrong with the group ticket")
         f.close()
 
-# Function to read booking from bookings.txt
+    # Function to read booking from bookings.txt
     def read_booking(self,booking_details_path):
         try:
             f = open(booking_details_path, 'r')
@@ -248,27 +248,27 @@ class Records:
             print("Cannot load the booking file,run as if there is no previous booking file")
             Records.list_of_existing_booking = []
 
-# Function to check if the inputted customers is in already exisiting customers list
+    # Function to check if the inputted customers is in already exisiting customers list
     def find_customer(self,customer_search_keyword):
         for customer in Records.list_of_existing_customers:
             if customer.get_id() == customer_search_keyword or customer.get_name()==customer_search_keyword:
                 return customer
         return None
     
- # Function to check if the inputted movies is in already exisiting movies list           
+    # Function to check if the inputted movies is in already exisiting movies list           
     def find_movie(self,movie_search_keyword):
         for movie in Records.list_of_existing_movies:
             if movie.get_id()==movie_search_keyword or movie.get_name()==movie_search_keyword:
                 return movie
         return None
- # Function to check if the inputted ticket type is in already exisiting ticket type list           
+    # Function to check if the inputted ticket type is in already exisiting ticket type list           
     def find_ticket(self,ticket_search_keyword):
         for ticket in Records.list_of_existing_ticket_types:
             if ticket.get_id()==ticket_search_keyword or ticket.get_name()==ticket_search_keyword:
                 return ticket
         return None
     
-# Function to display existing customer infromation   
+    # Function to display existing customer infromation   
     def display_customers(self):
         print("{:<10} {:<10} {:<10} {:<10} ".format( 'id', 'name', 'discount_rate','threshold')) 
         for customer in Records.list_of_existing_customers:
@@ -279,17 +279,17 @@ class Records:
             else:
                 print("{:<10} {:<15} ".format( customer.get_id(),customer.get_name()))
 
-# Function to display exisiting movies information
+    # Function to display exisiting movies information
     def display_movies(self):
         print("{:<10} {:<10} {:<10} ".format( 'id', 'name', 'seat_available'))
         for movie in Records.list_of_existing_movies:
-            print("{:<10} {:<10} {:<10} ".format( movie.get_id(), movie.get_name(),movie.get_seat_available()))
+            print("{:<10} {:<14} {:<14} ".format( movie.get_id(), movie.get_name(),movie.get_seat_available()))
 
-# Function to display exisiting ticketypes information.
+    # Function to display exisiting ticketypes information.
     def display_tickets(self):
         print("{:<10} {:<10} {:<10} ".format( 'id', 'name', 'unit_price'))
         for ticket in Records.list_of_existing_ticket_types:
-            print("{:<10} {:<10} {:<10} ".format( ticket.get_id(), ticket.get_name(),ticket.get_price()))
+            print("{:<10} {:<14} {:<14} ".format( ticket.get_id(), ticket.get_name(),ticket.get_price()))
 
     # Function to display exisiting booking information.
     def display_booking(self):
@@ -342,17 +342,17 @@ class Operations():
         print("welcome to RMIT Ticketing sysytem!")
         print("####################################################################")
         print("""You can choose from the following option\n
-                1:Purchase a ticket
-                2:Display existing customer information 
-                3:Display exisiting movie information
-                4:Display existing ticket information
-                5:Add new movies
-                6.Adjust discount rate for all flat customers
-                7.Adjust discount rate for all Step customers
-                8.Display booking information
-                9.Display Popular movie
-                10.Display All records
-                0: Exit the program""")
+            1:Purchase a ticket
+            2:Display existing customer information 
+            3:Display exisiting movie information
+            4:Display existing ticket information
+            5:Add new movies
+            6.Adjust discount rate for all flat customers
+            7.Adjust discount rate for all Step customers
+            8.Display booking information
+            9.Display Popular movie
+            10.Display All records
+            0: Exit the program""")
         print("####################################################################")
         operation_input_type = input("choose one option")
         return operation_input_type
@@ -434,13 +434,13 @@ class Operations():
                         if f_or_s=="F":
                             self.customer=RewardFlatCustomer("F{}".format(customer_index_value),customer_name)
                             Records.list_of_existing_customers.append(self.customer)
-                            f.write("\nF{}, {}, {}".format(customer_index_value,customer_name,0.2))
+                            f.write("\nF{}, {}, {}".format(customer_index_value,customer_name,RewardFlatCustomer.discount_rate))
                             f.close()
                             break
                         elif f_or_s=="S": 
                             self.customer=RewardStepCustomer("S{}".format(customer_index_value),customer_name,0.3)
                             Records.list_of_existing_customers.append(self.customer)
-                            f.write("\nS{}, {}, {}, {}".format(customer_index_value,customer_name,0.3,50))
+                            f.write("\nS{}, {}, {}, {}".format(customer_index_value,customer_name,self.customer.get_discount_rate(),RewardStepCustomer.threshold))
                             f.close()
                             break
                         else:
@@ -454,11 +454,20 @@ class Operations():
                     break
                 else:
                     print("Enter the valid type")
-
+        else:
+            if isinstance(self.customer,RewardFlatCustomer):
+                print(self.customer.get_name() ,"is already a RewardFlat Customer")
+            elif isinstance(self.customer,RewardStepCustomer):
+                print(self.customer.get_name() ,"is already a RewardStep Customer")
+            elif isinstance(self.customer,Customer):
+                print(self.customer.get_name(),"is already a standard customer")
+            
         # print(self.customer,self.movie,self.ticket_type_list,self.ticket_quantity_list)
         booking=Booking(self.customer,self.movie,self.ticket_type_list,self.ticket_quantity_list)
+        Records.list_of_existing_booking.append(booking)
         self.total_cost_list=booking.compute_cost()
-        cost = self.total_cost_list[0]+self.total_cost_list[1]-self.total_cost_list[2]
+        discount=round(self.total_cost_list[2],2)
+        cost = self.total_cost_list[0]+self.total_cost_list[1]-discount
         self.total_cost=round(cost,2)
         self.seats=self.movie.set_seat_available(int(self.movie.get_seat_available()) - sum(self.ticket_quantity_list))
         self.add_to_booking()
@@ -483,7 +492,7 @@ class Operations():
             f.write("\n{}, {}, ".format(self.customer.get_name(), self.movie.get_name()))
             for index in range(0, len(self.ticket_type_list)):
                 f.write("{}, {}, ".format(self.ticket_type_list[index].get_name(), self.ticket_quantity_list[index]))
-            f.write("{}, {}, {}".format(self.customer.get_discount(self.total_cost_list[0]), 
+            f.write("{}, {}, {}".format(round(self.total_cost_list[2],2), 
                                         self.customer.get_booking_fee(sum(self.ticket_quantity_list)), 
                                         self.total_cost))
             f.close()
@@ -495,7 +504,7 @@ class Operations():
         print("-------------------------------------------------")
         print("Reciept of  ", self.customer.get_name())
         print("--------------------------------------------------")
-        print("Movie:                   ",      self.movie.get_name())
+        print("Movie:                ",    self.movie.get_name())
         for index in range(0, len(self.ticket_type_list)):
             print("Ticket Type:          ",     self.ticket_type_list[index].get_name())
             print("Ticket Unit Price:    ",     self.ticket_type_list[index].get_price())
@@ -503,7 +512,7 @@ class Operations():
             if len(self.ticket_type_list) > 1:
                 print("             ------                ")
         print("-----------------------------------------------------")
-        print("discount:              ", self.customer.get_discount(self.total_cost_list[0]))
+        print("discount:              ", round(self.customer.get_discount(self.total_cost_list[0]),2))
         print("Booking fee            ", self.customer.get_booking_fee(sum(self.ticket_quantity_list)))
         print("Total cost             ", self.total_cost)
 
@@ -542,7 +551,12 @@ class Operations():
                         print("{} movie added".format(movies))
                     else:
                         print("Movie already exists")        
-            break  
+                break
+            elif y_or_n == "n":
+                break
+            else:
+                print("Please enter the valid input")
+            
 # Function which allows the customer to adjust the disount rate of all the reward flat customers.
     def adjust_discount_rate_flat(self): 
         while True:
@@ -607,22 +621,21 @@ class Operations():
             for ticket in list_of_all_ticket_type:
                 all_records[movie][ticket]=0
             all_records[movie]["Revenue"]=0  
-      
 
         for booking in Records.list_of_existing_booking:
             tickets=[book.get_name() for book in booking.get_ticket()]
             qunatities = booking.get_quantity()
             for index in range(0,len(tickets)):
-                all_records[booking.movie.get_name()][tickets[index]] += qunatities[index]
+                all_records[booking.get_movie().get_name()][tickets[index]] += qunatities[index]
             cost, booking_fee, discount = booking.compute_cost()
             total_cost = cost+booking_fee-discount
-            all_records[booking.movie.get_name()]["Revenue"] += total_cost
+            all_records[booking.get_movie().get_name()]["Revenue"] += total_cost
         
         header = "".join("{:<12}".format(value) for value in list_of_all_ticket_type)
         print("{:<12} {} {:<12}".format("", header,"Revenue"))
         for movie in all_records.keys():
             ticket_type_values = "".join("{:<12}".format(all_records[movie][value]) for value in list_of_all_ticket_type)
-            print("{:<13} {} {:<15}".format(movie, ticket_type_values, all_records[movie]["Revenue"]))
+            print("{:<13} {} {:<15}".format(movie, ticket_type_values, round(all_records[movie]["Revenue"],2)))
 
     def exit_program(self):
         file_c = open(self.customer_details_path, 'w')

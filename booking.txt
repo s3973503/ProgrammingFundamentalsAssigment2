@@ -8,3 +8,17 @@ Sam, Avatar, adult, 2, 0, 4, 50.0
 Prat, StarWar, senior, 31, concession, 1, 164.25, 64, 547.5
 Prag, Avatar, child, 1, 0, 2, 19.5
 PragTest, BlackPanther, adult, 1, 0, 2, 25.0
+Sampreeth, Superman, Friend4, 2, student4, 2, 58.24, 8, 291.2
+Prat, Titanic, adult, 1, adult, 2, 22.5, 6, 75.0
+Reetha, BlackPanther, child, 3, GrandFamily, 5, 141.75, 16, 472.5
+Amith, Superman, adult, 45, 0, 90, 1125.0
+Sanjani, Superman, adult, 1, 0, 2, 25.0
+sanny, Titanic, adult, 1, 0, 2, 25.0
+Yongli, Avatar, senior, 1, 3.4, 2, 17.0
+Telli, Avatar, senior, 3, 15.3, 6, 51.0
+Ganga, Avatar, adult, 1, 5.0, 2, 25.0
+hgy, Avatar, child, 1, 3.9, 2, 19.5
+Yeuririr, Avatar, child, 1, 3.9, 2, 19.5
+ganagate, Titanic, child, 2, 0, 4, 39.0
+anand, Avatar, adult, 1, 0, 2, 25.0
+Akshay, Avatar, senior, 2, 0, 4, 34.0
