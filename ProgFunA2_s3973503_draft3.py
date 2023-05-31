@@ -293,6 +293,10 @@ class Records:
 
     # Function to display exisiting booking information.
     def display_booking(self):
+        if True != os.path.isfile("booking.txt"):
+            print('No Booking yet')
+            return
+
         f = open('booking.txt', 'r')
         for line in f.readlines():
             print("********************************************************************")
@@ -331,11 +335,14 @@ class Operations():
 
     def check_file(self,customer_details_path,movie_details_path,ticket_details_path ):  
         if True != os.path.isfile(customer_details_path):
-            print('customers.txt file not found')    
+            print('customers.txt file not found')
+            quit()   
         if True != os.path.isfile(movie_details_path):
             print('movies.txt file not found')
+            quit()   
         if True != os.path.isfile(ticket_details_path):
             print('tickets.txt file not found')
+            quit()   
 
 # Printing the menu option to choose from the following:
     def menu(self):
@@ -489,13 +496,23 @@ class Operations():
 
         try:
             f = open("booking.txt", "a")
-            f.write("\n{}, {}, ".format(self.customer.get_name(), self.movie.get_name()))
-            for index in range(0, len(self.ticket_type_list)):
-                f.write("{}, {}, ".format(self.ticket_type_list[index].get_name(), self.ticket_quantity_list[index]))
-            f.write("{}, {}, {}".format(round(self.total_cost_list[2],2), 
-                                        self.customer.get_booking_fee(sum(self.ticket_quantity_list)), 
-                                        self.total_cost))
-            f.close()
+            if os.path.getsize('booking.txt') == 0:
+                f.write("{}, {}, ".format(self.customer.get_name(), self.movie.get_name()))
+                for index in range(0, len(self.ticket_type_list)):
+                    f.write("{}, {}, ".format(self.ticket_type_list[index].get_name(), self.ticket_quantity_list[index]))
+                f.write("{}, {}, {}".format(round(self.total_cost_list[2],2), 
+                                            self.customer.get_booking_fee(sum(self.ticket_quantity_list)), 
+                                            self.total_cost))
+                f.close()
+            else:
+                f.write("\n{}, {}, ".format(self.customer.get_name(), self.movie.get_name()))
+                for index in range(0, len(self.ticket_type_list)):
+                    f.write("{}, {}, ".format(self.ticket_type_list[index].get_name(), self.ticket_quantity_list[index]))
+                f.write("{}, {}, {}".format(round(self.total_cost_list[2],2), 
+                                            self.customer.get_booking_fee(sum(self.ticket_quantity_list)), 
+                                            self.total_cost))
+                f.close()
+
         except:
             print('error occured')
             
@@ -588,9 +605,7 @@ class Operations():
                         print(e)  
             elif name_or_id==None:
                 print("The customer does not exist please enter the valid customer")
-    
-   
-        
+         
     def display_booking_info(self):
         self.record.display_booking()
     
@@ -640,7 +655,7 @@ class Operations():
     def exit_program(self):
         file_c = open(self.customer_details_path, 'w')
         file_m= open(self.movie_details_path,'w')
-        file_b= open(self.booking_details_path,'w')
+        file_b= open("booking.txt",'w')
         for customer in Records.list_of_existing_customers:
             if Records.list_of_existing_customers[-1] == customer:
                 if isinstance(customer,RewardStepCustomer):
@@ -709,7 +724,6 @@ if __name__ == "__main__":
         ticket_details_path = 'tickets.txt'
         booking_details_path = 'booking.txt'
 
-    
     operation = Operations(customer_details_path,movie_details_path,ticket_details_path,booking_details_path )
     while True:
         operation_input_type = operation.menu()

@@ -27,3 +27,4 @@ F26, Yeuririr, 0.2
 S27, ganagate, 0.3, 50
 S28, anand, 0.3, 50
 S29, Akshay, 0.3, 50
+S30, HelloWorld, 0.3, 50
