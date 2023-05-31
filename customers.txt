@@ -1,13 +1,1 @@
-C1, Olivia
-C2, Noah
-S3, George, 0.3, 50
-S5, Florence, 0.4, 50
-F8, Amelia, 0.2
-F10, Leo, 0.2
-C11, Henry
-C11, Henry
-C8, Sam
-S10, Prat, 0.3, 50
-F11, TestUser, 0.2
-S12, Prag, 0.3, 50
-C13, PragTest
+C1, OliviaC2, NoahS3, George, 0.3, 50S5, Florence, 0.4, 50F8, Amelia, 0.2F10, Leo, 0.2C11, HenryC11, HenryC8, SamS10, Prat, 0.3, 50F11, TestUser, 0.2S12, Prag, 0.3, 50C13, PragTest

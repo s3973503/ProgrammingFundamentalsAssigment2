@@ -1,4 +1,4 @@
-M1, Avatar, 50
+M1, Avatar, 40
 M2, Titanic, 38
 M3, StarWar, 50
 M4, BlackPanther, 50

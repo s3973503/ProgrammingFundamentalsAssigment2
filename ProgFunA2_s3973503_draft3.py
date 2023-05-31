@@ -164,8 +164,6 @@ class Records:
 
 # Function to read the customer from the customer.txt file
     def read_customers(self,customer_details_path):
-        if customer_details_path=="":
-            customer_details_path="customers.txt"
         f = open(customer_details_path, 'r')
         for line in f.readlines():
             customer_details = line.split(",")
@@ -181,8 +179,6 @@ class Records:
 
 # Function to read the movies from the movies.txt file   
     def read_movies(self,movie_details_path):
-        if movie_details_path=="":
-            movie_details_path="movies.txt"
         f = open(movie_details_path, 'r')
         for line in f.readlines():
             movie_details = line.split(",")
@@ -191,8 +187,6 @@ class Records:
         f.close()
 # Function to read the tickets from the tickets.txt file 
     def read_tickets(self,ticket_details_path):
-        if ticket_details_path=="":
-            ticket_details_path="tickets.txt"
         f = open(ticket_details_path, 'r')
         for line in f.readlines():
             ticket_details = line.split(",")
@@ -231,24 +225,28 @@ class Records:
 
 # Function to read booking from bookings.txt
     def read_booking(self,booking_details_path):
-        f = open(booking_details_path, 'r')
-        for line in f.readlines():
-            list_of_ticktet_type_booking=[]
-            list_of_ticket_quantity_booking=[]
-            booking_details = line.split(",")
-            for index in range(2,len(booking_details)):
-                if (index%2==0):
-                    details=self.find_ticket(booking_details[index].strip())
-                    if details!=None:
-                        list_of_ticktet_type_booking.append(details)
-                        list_of_ticket_quantity_booking.append(int(booking_details[index +1].strip()))
-                    else:
-                         break
-            customer = self.find_customer(booking_details[0].strip())
-            movie = self.find_movie(booking_details[1].strip())
-            booking = Booking(customer,movie,list_of_ticktet_type_booking,list_of_ticket_quantity_booking)
-            Records.list_of_existing_booking.append(booking)
-        f.close()
+        try:
+            f = open(booking_details_path, 'r')
+            for line in f.readlines():
+                list_of_ticktet_type_booking=[]
+                list_of_ticket_quantity_booking=[]
+                booking_details = line.split(",")
+                for index in range(2,len(booking_details)):
+                    if (index%2==0):
+                        details=self.find_ticket(booking_details[index].strip())
+                        if details!=None:
+                            list_of_ticktet_type_booking.append(details)
+                            list_of_ticket_quantity_booking.append(int(booking_details[index +1].strip()))
+                        else:
+                            break
+                customer = self.find_customer(booking_details[0].strip())
+                movie = self.find_movie(booking_details[1].strip())
+                booking = Booking(customer,movie,list_of_ticktet_type_booking,list_of_ticket_quantity_booking)
+                Records.list_of_existing_booking.append(booking)
+            f.close()
+        except:
+            print("Cannot load the booking file,run as if there is no previous booking file")
+            Records.list_of_existing_booking = []
 
 # Function to check if the inputted customers is in already exisiting customers list
     def find_customer(self,customer_search_keyword):
@@ -644,7 +642,7 @@ class Operations():
                 elif isinstance(customer,RewardFlatCustomer):
                     file_c.write("{}, {}, {}".format(customer.get_id(),customer.get_name(),customer.get_discount_rate()))   
                 else:
-                    file_c.write("{}, {}".format(customer.get_id(),customer.get_name()))
+                    file_c.write("{}, {}\n".format(customer.get_id(),customer.get_name()))
 
         for movie in Records.list_of_existing_movies:
             if movie == Records.list_of_existing_movies[-1]:
@@ -693,10 +691,10 @@ if __name__ == "__main__":
         ticket_details_path = sys.argv[3]
         booking_details_path = sys.argv[4]
     else:
-        customer_details_path = ''
-        movie_details_path = ''
-        ticket_details_path = ''
-        booking_details_path = ''
+        customer_details_path = 'customers.txt'
+        movie_details_path = 'movies.txt'
+        ticket_details_path = 'tickets.txt'
+        booking_details_path = 'booking.txt'
 
     
     operation = Operations(customer_details_path,movie_details_path,ticket_details_path,booking_details_path )

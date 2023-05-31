@@ -6,5 +6,5 @@ Florence, Titanic, senior, 3, concession, 1, 28.6, 8, 71.5
 Olivia, Avatar, adult, 2, student, 2, 0, 8, 91.0
 Sam, Avatar, adult, 2, 0, 4, 50.0
 Prat, StarWar, senior, 31, concession, 1, 164.25, 64, 547.5
-Prag, Avatar, child, 1, 0, 2, 21.5
-PragTest, BlackPanther, adult, 1, 0, 2, 27.0
+Prag, Avatar, child, 1, 0, 2, 19.5
+PragTest, BlackPanther, adult, 1, 0, 2, 25.0
