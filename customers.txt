@@ -5,3 +5,9 @@ S5, Florence, 0.4, 50
 F8, Amelia, 0.2
 F10, Leo, 0.2
 C11, Henry
+C11, Henry
+C8, Sam
+S10, Prat, 0.3, 50
+F11, TestUser, 0.2
+S12, Prag, 0.3, 50
+C13, PragTest

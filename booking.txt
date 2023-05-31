@@ -1,12 +1,10 @@
-Olivia, Avatar, adult, 2, student, 2, 0, 8, 99.0
-George, StarWar, Family4, 1, 24.840000000000003, 2, 59.96000000000001
-Leo, Titanic, student, 2, 8.200000000000001, 4, 36.8
-Amelia, Superman, Friend4, 1, 16.0, 2, 66.0
-Florence, Titanic, senior, 3, concession, 1, 28.6, 8, 50.9
-Olivia, Avatar, adult, 2, student, 2, 0, 8, 99.0
-Sampreeth, Avatar, adult, 2, senior, 4, 0, 12, 130.0
-Prat, StarWar, Family4, 1, 24.84, 2, 59.959999999999994
-TestUser, Avatar, Family4, 1, 24.84, 2, 59.959999999999994
-TestUser2, Avatar, Family4, 1, 24.84, 2, 59.959999999999994
-TestUser3, Avatar, Family4, 1, 24.84, 2, 59.96
-George, StarWar, Family4, 1, 21.36, 2, 51.84
+Olivia, Avatar, adult, 2, student, 2, 0, 8, 91.0
+George, StarWar, Family4, 1, 21.36, 2, 71.2
+Leo, Titanic, student, 2, 8.2, 4, 41.0
+Amelia, Superman, Friend4, 1, 16.0, 2, 80.0
+Florence, Titanic, senior, 3, concession, 1, 28.6, 8, 71.5
+Olivia, Avatar, adult, 2, student, 2, 0, 8, 91.0
+Sam, Avatar, adult, 2, 0, 4, 50.0
+Prat, StarWar, senior, 31, concession, 1, 164.25, 64, 547.5
+Prag, Avatar, child, 1, 0, 2, 21.5
+PragTest, BlackPanther, adult, 1, 0, 2, 27.0

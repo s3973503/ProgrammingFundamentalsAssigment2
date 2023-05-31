@@ -318,22 +318,26 @@ class Records:
 # creating a class operations
 class Operations():
 
-    def check_file(self):  
-        if True != os.path.isfile('./customers.txt'):
-            print('customers.txt file not found')    
-        if True != os.path.isfile('./movies.txt'):
-            print('movies.txt file not found')
-        if True != os.path.isfile('./tickets.txt'):
-            print('tickets.txt file not found')
-
     def __init__(self,customer_details_path,movie_details_path,ticket_details_path,booking_details_path):
-        self.check_file()
+        self.check_file(customer_details_path,movie_details_path,ticket_details_path)
+        self.customer_details_path=customer_details_path
+        self.movie_details_path=movie_details_path
+        self.ticket_details_path=ticket_details_path
+        self.booking_details_path=booking_details_path
         self.record = Records()
         self.record.read_customers(customer_details_path)
         self.record.read_movies(movie_details_path)
         self.record.read_tickets(ticket_details_path)
         if booking_details_path !='':
             self.record.read_booking(booking_details_path)
+
+    def check_file(self,customer_details_path,movie_details_path,ticket_details_path ):  
+        if True != os.path.isfile(customer_details_path):
+            print('customers.txt file not found')    
+        if True != os.path.isfile(movie_details_path):
+            print('movies.txt file not found')
+        if True != os.path.isfile(ticket_details_path):
+            print('tickets.txt file not found')
 
 # Printing the menu option to choose from the following:
     def menu(self):
@@ -424,26 +428,31 @@ class Operations():
             while True:
                 y_or_n= input("The customer is not in the rewards program. Do you want to register for rewards program[enter y or n]")
                 # Asking the new customers if they want to join to rewards program as step customer or flat customer 
+                customer_index_value=len(Records.list_of_existing_customers)+1
+                f = open(self.customer_details_path, 'a')
                 if y_or_n=="y":
                     while True:
                         f_or_s=input("What kind of rewards the customer wants?[enter F or S]")
                         if f_or_s=="F":
-                            # TODO: ID is hardcoded - Randamize it
-                            self.customer=RewardFlatCustomer("F10",customer_name)
+                            self.customer=RewardFlatCustomer("F{}".format(customer_index_value),customer_name)
                             Records.list_of_existing_customers.append(self.customer)
+                            f.write("\nF{}, {}, {}".format(customer_index_value,customer_name,0.2))
+                            f.close()
                             break
-                        elif f_or_s=="S":
-                            # TODO: ID is hardcoded - Randamize it
-                            self.customer=RewardStepCustomer("S10",customer_name,0.3)
+                        elif f_or_s=="S": 
+                            self.customer=RewardStepCustomer("S{}".format(customer_index_value),customer_name,0.3)
                             Records.list_of_existing_customers.append(self.customer)
+                            f.write("\nS{}, {}, {}, {}".format(customer_index_value,customer_name,0.3,50))
+                            f.close()
                             break
                         else:
                             print("Enther the valid type")
                     break
                 elif y_or_n=="n":
-                    # TODO: ID is hardcoded - Randamize it
-                    self.customer=Customer("c7",customer_name)
+                    self.customer=Customer("C{}".format(customer_index_value),customer_name)
                     Records.list_of_existing_customers.append(self.customer)
+                    f.write("\nC{}, {}".format(customer_index_value,customer_name))
+                    f.close()
                     break
                 else:
                     print("Enter the valid type")
@@ -473,10 +482,10 @@ class Operations():
 
         try:
             f = open("booking.txt", "a")
-            f.write("{}, {}, ".format(self.customer.get_name(), self.movie.get_name()))
+            f.write("\n{}, {}, ".format(self.customer.get_name(), self.movie.get_name()))
             for index in range(0, len(self.ticket_type_list)):
                 f.write("{}, {}, ".format(self.ticket_type_list[index].get_name(), self.ticket_quantity_list[index]))
-            f.write("{}, {}, {}\n".format(self.customer.get_discount(self.total_cost_list[0]), 
+            f.write("{}, {}, {}".format(self.customer.get_discount(self.total_cost_list[0]), 
                                         self.customer.get_booking_fee(sum(self.ticket_quantity_list)), 
                                         self.total_cost))
             f.close()
@@ -525,8 +534,13 @@ class Operations():
                     movies = movies.strip()
                     returned_result= self.record.find_movie(movies)
                     if returned_result==None:
-                        movie=Movie("M10",movies,seat_available=50)
+                        movie_index_value=len(Records.list_of_existing_movies)+1
+                        movie=Movie("M{}".format(movie_index_value),movies,seat_available=50)
                         Records.list_of_existing_movies.append(movie)
+                        f = open(self.movie_details_path, 'a')
+                        f.write("\nM{}, {}, {}".format(movie_index_value,movies,50))
+                        f.close()
+                        
                         print("{} movie added".format(movies))
                     else:
                         print("Movie already exists")        
@@ -612,8 +626,55 @@ class Operations():
             ticket_type_values = "".join("{:<12}".format(all_records[movie][value]) for value in list_of_all_ticket_type)
             print("{:<13} {} {:<15}".format(movie, ticket_type_values, all_records[movie]["Revenue"]))
 
+    def exit_program(self):
+        file_c = open(self.customer_details_path, 'w')
+        file_m= open(self.movie_details_path,'w')
+        file_b= open(self.booking_details_path,'w')
+        for customer in Records.list_of_existing_customers:
+            if Records.list_of_existing_customers[-1] == customer:
+                if isinstance(customer,RewardStepCustomer):
+                    file_c.write("{}, {}, {}, {}".format(customer.get_id(),customer.get_name(),customer.get_discount_rate(),customer.get_threshold())) 
+                elif isinstance(customer,RewardFlatCustomer):
+                    file_c.write("{}, {}, {}".format(customer.get_id(),customer.get_name(),customer.get_discount_rate()))   
+                else:
+                    file_c.write("{}, {}".format(customer.get_id(),customer.get_name()))
+            else:
+                if isinstance(customer,RewardStepCustomer):
+                    file_c.write("{}, {}, {}, {}".format(customer.get_id(),customer.get_name(),customer.get_discount_rate(),customer.get_threshold())) 
+                elif isinstance(customer,RewardFlatCustomer):
+                    file_c.write("{}, {}, {}".format(customer.get_id(),customer.get_name(),customer.get_discount_rate()))   
+                else:
+                    file_c.write("{}, {}".format(customer.get_id(),customer.get_name()))
+
+        for movie in Records.list_of_existing_movies:
+            if movie == Records.list_of_existing_movies[-1]:
+                file_m.write("{}, {}, {}".format(movie.get_id(), movie.get_name(),movie.get_seat_available()))
+            else:
+                file_m.write("{}, {}, {}\n".format(movie.get_id(), movie.get_name(),movie.get_seat_available()))
 
 
+        for booking in Records.list_of_existing_booking:
+            quantity_list = booking.get_quantity()
+            ticket_list = booking.get_ticket()
+            customer = booking.get_customer()
+            movie = booking.get_movie()
+            if booking == Records.list_of_existing_booking[-1]:
+                file_b.write("{}, {}, ".format(customer.get_name(), movie.get_name()))
+                for index in range(0, len(ticket_list)):
+                    file_b.write("{}, {}, ".format(ticket_list[index].get_name(), quantity_list[index]))
+                total_cost, booking_fee, discount = booking.compute_cost()
+                file_b.write("{}, {}, {}".format(discount, booking_fee, total_cost))
+            else:
+                file_b.write("{}, {}, ".format(customer.get_name(), movie.get_name()))
+                for index in range(0, len(ticket_list)):
+                    file_b.write("{}, {}, ".format(ticket_list[index].get_name(), quantity_list[index]))
+                total_cost, booking_fee, discount = booking.compute_cost()
+                file_b.write("{}, {}, {}\n".format(discount, booking_fee, total_cost))
+
+        file_c.close()
+        file_b.close()
+        file_m.close()
+        
 
  # Main function
 if __name__ == "__main__":
@@ -662,8 +723,8 @@ if __name__ == "__main__":
         if operation_input_type == "10":
             operation.display_all_records()
         if operation_input_type == "0":
+            operation.exit_program()
             break
-
 
 '''My Analysis/Reflection:
 The first step of any program is to read the problem statement ,
