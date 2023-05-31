@@ -638,9 +638,9 @@ class Operations():
                     file_c.write("{}, {}".format(customer.get_id(),customer.get_name()))
             else:
                 if isinstance(customer,RewardStepCustomer):
-                    file_c.write("{}, {}, {}, {}".format(customer.get_id(),customer.get_name(),customer.get_discount_rate(),customer.get_threshold())) 
+                    file_c.write("{}, {}, {}, {}\n".format(customer.get_id(),customer.get_name(),customer.get_discount_rate(),customer.get_threshold())) 
                 elif isinstance(customer,RewardFlatCustomer):
-                    file_c.write("{}, {}, {}".format(customer.get_id(),customer.get_name(),customer.get_discount_rate()))   
+                    file_c.write("{}, {}, {}\n".format(customer.get_id(),customer.get_name(),customer.get_discount_rate()))   
                 else:
                     file_c.write("{}, {}\n".format(customer.get_id(),customer.get_name()))
 
